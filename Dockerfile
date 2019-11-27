@@ -55,13 +55,7 @@ ENV OXD_SERVER_URL=https://localhost:8553 \
     GG_VERSION=4.1 \
     EXPLICIT_HOST=0.0.0.0
 
-# https://github.com/GluuFederation/gluu-gateway.git
 RUN svn ls https://github.com/GluuFederation/gluu-gateway.git/branches/version_4.1/konga 
-    # && unzip -q ./konga.zip -d ./ \
-    # && mv ./kong/* . \
-    # && rm -rf ./konga.zip ./gluu-gateway-version_4.1
-
-RUN ls ./
 
 EXPOSE 1337
 
@@ -70,4 +64,3 @@ COPY /scripts/entrypoint.sh /app
 RUN chmod +x entrypoint.sh
 
 ENTRYPOINT [ "/bin/bash", "./entrypoint.sh" ]
-

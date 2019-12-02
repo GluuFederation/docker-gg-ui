@@ -48,9 +48,9 @@ ENV SSL_KEY_PATH=key.pem \
 # OXD variables
 ENV OXD_SERVER_URL=https://localhost:8553 \
     OP_SERVER_URL=https://demoexample.gluu.org \
-    OXD_ID=0cc5503c-6cce-4ba4-b6d7-0786b6d2dxxx \
-    CLIENT_ID=xxx03c-6cce-4ba4-b6d7-0786b6d2dxxx \
-    CLIENT_SECRET=a5263b14-0afb-4a59-b42a-81d656e8717c \
+    OXD_ID= \
+    CLIENT_ID= \
+    CLIENT_SECRET= \
     OXD_SERVER_VERSION=4.0 \
     GG_VERSION=4.0 \
     EXPLICIT_HOST=0.0.0.0

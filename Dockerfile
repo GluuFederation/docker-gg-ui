@@ -1,19 +1,21 @@
-FROM node:10-alpine
+FROM mhart/alpine-node:6.11.3 
 
 RUN apk update \
-    && apk add --no-cache --virtual build-deps subversion git
+    && apk add --no-cache --virtual build-deps git
 
 # ===============
 # Gluu Gateway UI
 # ===============
 
-ENV GLUU_VERSION=v4.0.0
+ENV GIT_BRANCH=version_4.1
 
-RUN svn co https://github.com/GluuFederation/gluu-gateway/tags/${GLUU_VERSION}/konga /opt/gluu-gateway/konga \
-    && cd /opt/gluu-gateway/konga \
+WORKDIR /opt/gluu-gateway-ui
+
+RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /opt/gluu-gateway-ui \
+    && cd /opt/gluu-gateway-ui \
     && npm install -g bower \
     && npm --unsafe-perm --production install \
-    && rm -rf .svn screenshots test Dockerfile .dockerignore .gitignore
+    && rm -rf .svn screenshots test Dockerfile .dockerignore .gitignore start.sh
 
 # =======
 # Cleanup
@@ -27,9 +29,9 @@ RUN apk del build-deps \
 # ================
 
 # for DB connections
-ENV DB_HOST=localhost \
-    DB_USER=postgres \
-    DB_PASSWORD=admin \
+ENV DB_HOST=kong-database \
+    DB_USER=konga \
+    DB_PASSWORD=konga \
     DB_PORT=5432 \
     DB_DATABASE=konga \
     DB_POOLSIZE=10 \
@@ -39,18 +41,18 @@ ENV DB_HOST=localhost \
     HOOK_TIMEOUT=180000 \ 
     PORT=1338 
 #session
-ENV SESSION_SECRET=pass_your_own_secret
+ENV SESSION_SECRET=
 
 # certs
-ENV SSL_KEY_PATH=key.pem \
-    SSL_CERT_PATH=cert.pem 
+ENV SSL_KEY_PATH=/etc/certs/key.pem \
+    SSL_CERT_PATH=/etc/certs/certificate.pem
 
 # OXD variables
 ENV OXD_SERVER_URL=https://localhost:8553 \
     OP_SERVER_URL=https://demoexample.gluu.org \
-    OXD_ID=0cc5503c-6cce-4ba4-b6d7-0786b6d2dxxx \
-    CLIENT_ID=xxx03c-6cce-4ba4-b6d7-0786b6d2dxxx \
-    CLIENT_SECRET=a5263b14-0afb-4a59-b42a-81d656e8717c \
+    OXD_ID= \
+    CLIENT_ID= \
+    CLIENT_SECRET= \
     OXD_SERVER_VERSION=4.0 \
     GG_VERSION=4.0 \
     EXPLICIT_HOST=0.0.0.0
@@ -62,7 +64,7 @@ ENV OXD_SERVER_URL=https://localhost:8553 \
 LABEL name="gluu-gateway-ui" \
     maintainer="Gluu Inc. <support@gluu.org>" \
     vendor="Gluu Federation" \
-    version="4.0.0" \
+    version="4.1.0" \
     release="dev" \
     summary="Gluu Gateway UI" \
     description="Gluu Gateway (GG) is an API gateway that leverages the Gluu Server for central OAuth client management and access control"
@@ -71,10 +73,10 @@ LABEL name="gluu-gateway-ui" \
 # misc
 # ====
 
-COPY scripts/start.sh /opt/gluu-gateway/konga/start.sh
-RUN chmod +x /opt/gluu-gateway/konga/start.sh
+COPY scripts /opt/gluu-gateway-ui/setup/start.sh 
+RUN chmod +x /opt/gluu-gateway-ui/setup/start.sh \
+    && sed -i '46s/.*ssl: process.env.DB_SSL || false/ssl: process.env.DB_SSL \&\& JSON.parse(process.env.DB_SSL.toLowerCase()) || false/' /opt/gluu-gateway-ui/config/local.js
 
 EXPOSE 1337
 
-WORKDIR /opt/gluu-gateway/konga
-ENTRYPOINT ["/opt/gluu-gateway/konga/start.sh"]
+ENTRYPOINT ["/bin/sh", "/opt/gluu-gateway-ui/setup/start.sh"]

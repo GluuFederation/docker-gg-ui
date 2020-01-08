@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-#bash start.sh -c prepare -a postgres -u postgres://postgres:konga@localhost:5432/gg_ui
+#bash start.sh -c prepare -a postgres -u postgres://kong:kong@localhost:5432/gg_ui
 
 # if no args are set
 if [ $# -eq 0 ]
@@ -20,7 +20,7 @@ if [ $# -eq 0 ]
 
         if [ "$COMMAND" == "prepare" ]
             then
-                node ./bin/konga.js $COMMAND --adapter $ADAPTER --uri $URI
+                node /opt/gluu-gateway-ui/bin/konga.js $COMMAND --adapter $ADAPTER --uri $URI
             else
                 echo "Invalid command: $COMMAND Please use prepare"
                 exit 1

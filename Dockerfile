@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.11.3 
+FROM mhart/alpine-node:6.11.3
 
 RUN apk update \
     && apk add --no-cache --virtual build-deps git
@@ -38,8 +38,8 @@ ENV DB_HOST=kong-database \
     DB_SSL=false \
     DB_ADAPTER=postgres \
     POSTGRES_VERSION=10.x \
-    HOOK_TIMEOUT=180000 \ 
-    PORT=1338 
+    HOOK_TIMEOUT=180000 \
+    PORT=1338
 #session
 ENV SESSION_SECRET=
 
@@ -67,13 +67,13 @@ LABEL name="gluu-gateway-ui" \
     version="4.1.0" \
     release="dev" \
     summary="Gluu Gateway UI" \
-    description="Gluu Gateway (GG) is an API gateway that leverages the Gluu Server for central OAuth client management and access control"
+    description="User Interface (UI) for Gluu Gateway"
 
 # ====
 # misc
 # ====
 
-COPY scripts /opt/gluu-gateway-ui/setup/start.sh 
+COPY scripts /opt/gluu-gateway-ui/setup/start.sh
 RUN chmod +x /opt/gluu-gateway-ui/setup/start.sh \
     && sed -i '46s/.*ssl: process.env.DB_SSL || false/ssl: process.env.DB_SSL \&\& JSON.parse(process.env.DB_SSL.toLowerCase()) || false/' /opt/gluu-gateway-ui/config/local.js
 

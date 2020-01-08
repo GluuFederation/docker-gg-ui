@@ -73,9 +73,8 @@ LABEL name="gluu-gateway-ui" \
 # misc
 # ====
 
-COPY scripts /opt/gluu-gateway-ui/setup/start.sh
-RUN chmod +x /opt/gluu-gateway-ui/setup/start.sh \
-    && sed -i '46s/.*ssl: process.env.DB_SSL || false/ssl: process.env.DB_SSL \&\& JSON.parse(process.env.DB_SSL.toLowerCase()) || false/' /opt/gluu-gateway-ui/config/local.js
+COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
+RUN chmod +x /opt/gluu-gateway-ui/setup/start.sh 
 
 EXPOSE 1337
 

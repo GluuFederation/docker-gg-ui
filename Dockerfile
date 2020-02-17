@@ -49,7 +49,7 @@ ENV SSL_KEY_PATH=/etc/certs/key.pem \
 
 # OXD variables
 ENV OXD_SERVER_URL=https://localhost:8553 \
-    OP_SERVER_URL=https://ce-dev6.gluu.org \
+    OP_SERVER_URL=https://demoexample.gluu.org \
     OXD_ID= \
     CLIENT_ID= \
     CLIENT_SECRET= \

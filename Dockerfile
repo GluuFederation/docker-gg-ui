@@ -1,28 +1,26 @@
-FROM mhart/alpine-node:6.11.3
+FROM mhart/alpine-node:6.11.3 AS build
 
-RUN apk update \
-    && apk add --no-cache --virtual build-deps git
+RUN apk add --update --no-cache --virtual \
+    build-deps \
+    git
 
-# ===============
-# Gluu Gateway UI
-# ===============
+ARG GIT_BRANCH=version_4.1
 
-ENV GIT_BRANCH=version_4.1
+RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /tmp \
+    && cd /tmp \
+    && npm install -g bower \
+    && npm --unsafe-perm --production install \
+    && rm -rf .svn screenshots test Dockerfile .dockerignore .gitignore start.sh 
+
+# ==========================
+# Gluu Gateway UI Main Image
+# ==========================
+
+FROM mhart/alpine-node:6.11.3 
 
 WORKDIR /opt/gluu-gateway-ui
 
-RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /opt/gluu-gateway-ui \
-    && cd /opt/gluu-gateway-ui \
-    && npm install -g bower \
-    && npm --unsafe-perm --production install \
-    && rm -rf .svn screenshots test Dockerfile .dockerignore .gitignore start.sh
-
-# =======
-# Cleanup
-# =======
-
-RUN apk del build-deps \
-    && rm -rf /var/cache/apk/*
+COPY --from=build /tmp /opt/gluu-gateway-ui 
 
 # ================
 # Environment vars

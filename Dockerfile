@@ -1,28 +1,27 @@
-FROM mhart/alpine-node:6.11.3
+FROM node:10-alpine AS build
 
-RUN apk update \
-    && apk add --no-cache --virtual build-deps git
+RUN apk add --update --no-cache --virtual \
+    build-deps \
+    git
 
-# ===============
-# Gluu Gateway UI
-# ===============
+ARG GIT_BRANCH=version_4.1
 
-ENV GIT_BRANCH=version_4.1
+RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
+    && cd /gg-tmp \
+    && npm install -g bower \
+    && npm --unsafe-perm --production install \
+    && npm update -g \
+    && rm -rf .svn screenshots test .dockerignore .gitignore 
+
+# ==========================
+# Gluu Gateway UI Main Image
+# ==========================
+
+FROM node:10-alpine
 
 WORKDIR /opt/gluu-gateway-ui
 
-RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /opt/gluu-gateway-ui \
-    && cd /opt/gluu-gateway-ui \
-    && npm install -g bower \
-    && npm --unsafe-perm --production install \
-    && rm -rf .svn screenshots test Dockerfile .dockerignore .gitignore start.sh
-
-# =======
-# Cleanup
-# =======
-
-RUN apk del build-deps \
-    && rm -rf /var/cache/apk/*
+COPY --from=build /gg-tmp /opt/gluu-gateway-ui 
 
 # ================
 # Environment vars
@@ -39,6 +38,7 @@ ENV DB_HOST=kong-database \
     DB_ADAPTER=postgres \
     POSTGRES_VERSION=10.x \
     HOOK_TIMEOUT=180000 \
+    KONGA_HOOK_TIMEOUT=180000 \
     PORT=1338
 #session
 ENV SESSION_SECRET=
@@ -75,9 +75,9 @@ LABEL name="gluu-gateway-ui" \
 # misc
 # ====
 
-COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
-RUN chmod +x /opt/gluu-gateway-ui/setup/start.sh 
+# COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
+RUN chmod +x ./start.sh 
 
 EXPOSE 1337
 
-ENTRYPOINT ["/bin/sh", "/opt/gluu-gateway-ui/setup/start.sh"]
+ENTRYPOINT ["/bin/sh", "./start.sh"]

@@ -74,7 +74,7 @@ LABEL name="gluu-gateway-ui" \
 # ====
 # misc
 # ====
-RUN ls
+
 # COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
 RUN chmod +x ./start.sh 
 

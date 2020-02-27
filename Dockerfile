@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.11.3 AS build
+FROM node:10-alpine AS build
 
 RUN apk add --update --no-cache --virtual \
     build-deps \
@@ -6,21 +6,22 @@ RUN apk add --update --no-cache --virtual \
 
 ARG GIT_BRANCH=version_4.1
 
-RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /tmp \
-    && cd /tmp \
+RUN git clone --single-branch --branch ${GIT_BRANCH} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
+    && cd /gg-tmp \
     && npm install -g bower \
     && npm --unsafe-perm --production install \
-    && rm -rf .svn screenshots test Dockerfile .dockerignore .gitignore start.sh 
+    && npm update -g \
+    && rm -rf .svn screenshots test .dockerignore .gitignore 
 
 # ==========================
 # Gluu Gateway UI Main Image
 # ==========================
 
-FROM mhart/alpine-node:6.11.3 
+FROM node:10-alpine
 
 WORKDIR /opt/gluu-gateway-ui
 
-COPY --from=build /tmp /opt/gluu-gateway-ui 
+COPY --from=build /gg-tmp /opt/gluu-gateway-ui 
 
 # ================
 # Environment vars
@@ -37,6 +38,7 @@ ENV DB_HOST=kong-database \
     DB_ADAPTER=postgres \
     POSTGRES_VERSION=10.x \
     HOOK_TIMEOUT=180000 \
+    KONGA_HOOK_TIMEOUT=180000 \
     PORT=1338
 #session
 ENV SESSION_SECRET=
@@ -72,10 +74,10 @@ LABEL name="gluu-gateway-ui" \
 # ====
 # misc
 # ====
-
-COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
-RUN chmod +x /opt/gluu-gateway-ui/setup/start.sh 
+RUN ls
+# COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
+RUN chmod +x ./start.sh 
 
 EXPOSE 1337
 
-ENTRYPOINT ["/bin/sh", "/opt/gluu-gateway-ui/setup/start.sh"]
+ENTRYPOINT ["/bin/sh", "./start.sh"]

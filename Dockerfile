@@ -7,9 +7,9 @@ RUN apk update \
 # Gluu Gateway UI
 # ===============
 
-ENV GLUU_VERSION=v4.0.0
+ENV GLUU_VERSION=4.1
 
-RUN svn co https://github.com/GluuFederation/gluu-gateway/tags/${GLUU_VERSION}/konga /opt/gluu-gateway/konga \
+RUN svn co https://github.com/GluuFederation/gluu-gateway-ui/tags/${GLUU_VERSION} /opt/gluu-gateway/konga \
     && cd /opt/gluu-gateway/konga \
     && npm install -g bower \
     && npm --unsafe-perm --production install \
@@ -51,8 +51,8 @@ ENV OXD_SERVER_URL=https://localhost:8553 \
     OXD_ID=0cc5503c-6cce-4ba4-b6d7-0786b6d2dxxx \
     CLIENT_ID=xxx03c-6cce-4ba4-b6d7-0786b6d2dxxx \
     CLIENT_SECRET=a5263b14-0afb-4a59-b42a-81d656e8717c \
-    OXD_SERVER_VERSION=4.0 \
-    GG_VERSION=4.0 \
+    OXD_SERVER_VERSION=4.1 \
+    GG_VERSION=4.1 \
     EXPLICIT_HOST=0.0.0.0
 
 # ===========
@@ -62,7 +62,7 @@ ENV OXD_SERVER_URL=https://localhost:8553 \
 LABEL name="gluu-gateway-ui" \
     maintainer="Gluu Inc. <support@gluu.org>" \
     vendor="Gluu Federation" \
-    version="4.0.0" \
+    version="4.1.0" \
     release="dev" \
     summary="Gluu Gateway UI" \
     description="Gluu Gateway (GG) is an API gateway that leverages the Gluu Server for central OAuth client management and access control"

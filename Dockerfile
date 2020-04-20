@@ -4,9 +4,9 @@ RUN apk add --update --no-cache --virtual \
     build-deps \
     git
 
-ARG GG_TREE=4.1
+ENV GLUU_GG_UI_VERSION=version_4.2
 
-RUN git clone --single-branch --branch ${GG_TREE} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
+RUN git clone --single-branch --branch ${GLUU_GG_UI_VERSION} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
     && cd /gg-tmp \
     && npm install -g bower \
     && npm --unsafe-perm --production install \

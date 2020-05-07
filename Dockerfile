@@ -39,7 +39,8 @@ ENV DB_HOST=kong-database \
     POSTGRES_VERSION=10.x \
     HOOK_TIMEOUT=180000 \
     KONGA_HOOK_TIMEOUT=180000 \
-    PORT=1338
+    PORT=1338 \
+    KONG_ADMIN_URL=http://localhost:8001
 #session
 ENV SESSION_SECRET=
 

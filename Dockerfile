@@ -76,7 +76,7 @@ LABEL name="gluu-gateway-ui" \
 # misc
 # ====
 
-# COPY /scripts/entrypoint.sh /opt/gluu-gateway-ui/setup/entrypoint.sh
+COPY /scripts/entrypoint.sh /opt/gluu-gateway-ui/entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
 EXPOSE 1337

@@ -4,9 +4,9 @@ RUN apk add --update --no-cache --virtual \
     build-deps \
     git
 
-ARG GG_TREE=4.1
+ENV GLUU_GATEWAY_UI_VERSION=version_4.2.0
 
-RUN git clone --single-branch --branch ${GG_TREE} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
+RUN git clone --single-branch --branch ${GLUU_GATEWAY_UI_VERSION} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
     && cd /gg-tmp \
     && npm install -g bower \
     && npm --unsafe-perm --production install \
@@ -39,9 +39,10 @@ ENV DB_HOST=kong-database \
     POSTGRES_VERSION=10.x \
     HOOK_TIMEOUT=180000 \
     KONGA_HOOK_TIMEOUT=180000 \
-    PORT=1338
+    PORT=1338 \
+    KONG_ADMIN_URL=http://localhost:8001
 #session
-ENV SESSION_SECRET=
+ENV SESSION_SECRET=""
 
 # certs
 ENV SSL_KEY_PATH=/etc/certs/key.pem \
@@ -50,14 +51,14 @@ ENV SSL_KEY_PATH=/etc/certs/key.pem \
 # OXD variables
 ENV OXD_SERVER_URL=https://localhost:8553 \
     OP_SERVER_URL=https://demoexample.gluu.org \
-    OXD_ID= \
-    CLIENT_ID= \
-    CLIENT_SECRET= \
-    OXD_SERVER_VERSION=4.1 \
-    GG_VERSION=4.1 \
+    OXD_ID="" \
+    CLIENT_ID="" \
+    CLIENT_SECRET="" \
+    OXD_SERVER_VERSION=4.2 \
+    GG_VERSION=4.2 \
     EXPLICIT_HOST=127.0.0.1 \
     GG_UI_REDIRECT_URL_HOST=localhost \
-    GG_HOST=localhost 
+    GG_HOST=localhost
 
 # ===========
 # Metadata
@@ -66,7 +67,7 @@ ENV OXD_SERVER_URL=https://localhost:8553 \
 LABEL name="gluu-gateway-ui" \
     maintainer="Gluu Inc. <support@gluu.org>" \
     vendor="Gluu Federation" \
-    version="4.1.0" \
+    version="4.2.0" \
     release="dev" \
     summary="Gluu Gateway UI" \
     description="User Interface (UI) for Gluu Gateway"
@@ -75,9 +76,9 @@ LABEL name="gluu-gateway-ui" \
 # misc
 # ====
 
-# COPY /scripts/start.sh /opt/gluu-gateway-ui/setup/start.sh
-RUN chmod +x ./start.sh 
+# COPY /scripts/entrypoint.sh /opt/gluu-gateway-ui/setup/entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 EXPOSE 1337
 
-ENTRYPOINT ["/bin/sh", "./start.sh"]
+ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]

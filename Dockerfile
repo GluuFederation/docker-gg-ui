@@ -11,7 +11,7 @@ RUN git clone --single-branch --branch ${GLUU_GATEWAY_UI_VERSION} https://github
     && npm install -g bower \
     && npm --unsafe-perm --production install \
     && npm update -g \
-    && rm -rf .svn screenshots test .dockerignore .gitignore 
+    && rm -rf .svn screenshots test .dockerignore .gitignore
 
 # ==========================
 # Gluu Gateway UI Main Image
@@ -21,7 +21,7 @@ FROM node:10-alpine
 
 WORKDIR /opt/gluu-gateway-ui
 
-COPY --from=build /gg-tmp /opt/gluu-gateway-ui 
+COPY --from=build /gg-tmp /opt/gluu-gateway-ui
 
 # ================
 # Environment vars
@@ -68,7 +68,7 @@ LABEL name="gluu-gateway-ui" \
     maintainer="Gluu Inc. <support@gluu.org>" \
     vendor="Gluu Federation" \
     version="4.2.0" \
-    release="dev" \
+    release="01" \
     summary="Gluu Gateway UI" \
     description="User Interface (UI) for Gluu Gateway"
 

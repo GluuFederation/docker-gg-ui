@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-#bash start.sh -c prepare -a postgres -u postgres://kong:kong@localhost:5432/gg_ui
+#bash entrypoint.sh -c prepare -a postgres -u postgres://kong:kong@localhost:5432/gg_ui
 
 # if no args are set
 if [ $# -eq 0 ]

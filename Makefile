@@ -1,4 +1,4 @@
-GLUU_VERSION=4.1.0
+GLUU_VERSION=4.2.1
 IMAGE_NAME=gluufederation/gluu-gateway-ui
 UNSTABLE_VERSION=dev
 

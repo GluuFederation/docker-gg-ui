@@ -70,7 +70,7 @@ LABEL name="gluu-gateway-ui" \
     maintainer="Gluu Inc. <support@gluu.org>" \
     vendor="Gluu Federation" \
     version="4.2.1" \
-    release="dev" \
+    release="02" \
     summary="Gluu Gateway UI" \
     description="User Interface (UI) for Gluu Gateway"
 

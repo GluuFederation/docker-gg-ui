@@ -6,7 +6,7 @@ RUN apk add --update --no-cache --virtual \
 
 
 ENV GLUU_GATEWAY_UI_VERSION=version_4.2.2
-ENV GLUU_GATEWAY_UI_COMMIT_ID=3dc08b025fe6c3e851ff4859a6650e449cd7ea9c
+ENV GLUU_GATEWAY_UI_COMMIT_ID=4320700d474d2c04b37a27f6ca8e4053c9c8efb6
 
 RUN git clone --single-branch --branch ${GLUU_GATEWAY_UI_VERSION} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
     && cd /gg-tmp \
@@ -69,8 +69,8 @@ ENV OXD_SERVER_URL=https://localhost:8553 \
 LABEL name="gluu-gateway-ui" \
     maintainer="Gluu Inc. <support@gluu.org>" \
     vendor="Gluu Federation" \
-    version="4.2.1" \
-    release="02" \
+    version="4.2.2" \
+    release="01" \
     summary="Gluu Gateway UI" \
     description="User Interface (UI) for Gluu Gateway"
 

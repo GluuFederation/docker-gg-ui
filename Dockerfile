@@ -5,8 +5,8 @@ RUN apk add --update --no-cache --virtual \
     git
 
 
-ENV GLUU_GATEWAY_UI_VERSION=version_4.2.1
-ENV GLUU_GATEWAY_UI_COMMIT_ID=887c44eb127ad7d023e430f7deac574ee7c5c6fd
+ENV GLUU_GATEWAY_UI_VERSION=version_4.2.2
+ENV GLUU_GATEWAY_UI_COMMIT_ID=3dc08b025fe6c3e851ff4859a6650e449cd7ea9c
 
 RUN git clone --single-branch --branch ${GLUU_GATEWAY_UI_VERSION} https://github.com/GluuFederation/gluu-gateway-ui.git /gg-tmp \
     && cd /gg-tmp \
